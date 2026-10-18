@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ContextAnchor — Docs & Tutorials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b11;--panel:#111722;--panel2:#0d131d;--line:#1e2836;--txt:#e6edf3;--mut:#8295af;--acc:#38bdf8;--red:#ff3b5c;--amber:#ffb224;--green:#2fe08a;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif;line-height:1.7}
+a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);background:rgba(7,11,17,.74);border-bottom:1px solid var(--line)}
+nav .inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:14px;height:60px;padding:0 20px}
+.logo{width:32px;height:32px;display:grid;place-items:center;font-size:17px;background:linear-gradient(135deg,#0ea5e9,#2563eb);border-radius:9px;box-shadow:0 0 14px rgba(56,189,248,.5)}
+.brand{font-weight:800;font-size:16px}nav .sp{flex:1}
+nav a.link{color:var(--mut);font-weight:600;font-size:13.5px}
+.layout{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:238px 1fr;gap:34px;padding:28px 20px 80px}
+aside{position:sticky;top:82px;align-self:start;height:max-content;font-size:13.5px}
+aside .grp{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--mut);margin:16px 0 8px}
+aside a{display:block;color:var(--mut);padding:4px 0;font-weight:500}
+aside a:hover{color:var(--txt);text-decoration:none}
+main{min-width:0}
+h1{font-size:30px;letter-spacing:-.5px;margin:0 0 6px}
+.lede{color:var(--mut);font-size:15.5px;margin-bottom:10px}
+h2{font-size:21px;margin:40px 0 10px;padding-top:12px;border-top:1px solid var(--line);letter-spacing:-.3px}
+h3{font-size:16px;margin:24px 0 6px}
+p,li{color:#c5d0de;font-size:14.5px}
+code{font-family:var(--mono);font-size:12.8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--acc)}
+pre{background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:14px 16px;overflow:auto;margin:12px 0}
+pre code{background:none;border:none;padding:0;color:#d7e2f0;font-size:12.8px;line-height:1.6}
+.note{background:rgba(56,189,248,.07);border:1px solid rgba(56,189,248,.25);border-radius:11px;padding:12px 15px;margin:14px 0;font-size:13.8px}
+.note b{color:var(--acc)}
+.warn{background:rgba(255,178,36,.07);border:1px solid rgba(255,178,36,.28);border-radius:11px;padding:12px 15px;margin:14px 0;font-size:13.8px}
+.step{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:11px;padding:12px 16px;margin:12px 0}
+.step b{color:var(--acc)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13.5px}
+th{text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.7px;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+td code{white-space:nowrap}
+.pill{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:6px}
+.get{background:rgba(47,224,138,.15);color:var(--green)}.post{background:rgba(56,189,248,.15);color:var(--acc)}
+@media(max-width:860px){.layout{grid-template-columns:1fr}aside{position:static}}
+</style>
+</head>
+<body>
+<nav><div class="inner">
+  <div class="logo">⚓</div><div class="brand">ContextAnchor Docs</div>
+  <div class="sp"></div>
+  <a class="link" href="/landing">About</a>
+  <a class="link" href="/">Dashboard</a>
+</div></nav>
+
+<div class="layout">
+<aside>
+  <div class="grp">Start</div>
+  <a href="#overview">Overview</a>
+  <a href="#quickstart">Quick start</a>
+  <a href="#concepts">Core concepts</a>
+  <div class="grp">Using it</div>
+  <a href="#dashboard">The dashboard</a>
+  <a href="#ingest">Ingesting repos</a>
+  <a href="#ask">Grounded Ask</a>
+  <a href="#settings">Settings</a>
+  <div class="grp">Tutorials</div>
+  <a href="#t-first">1 · First analysis</a>
+  <a href="#t-repo">2 · Your own repo</a>
+  <a href="#t-mcp">3 · Connect an AI agent (MCP)</a>
+  <a href="#t-precommit">4 · Pre-commit gate</a>
+  <a href="#t-prbot">5 · GitHub PR bot</a>
+  <a href="#t-claudemd">6 · Generate CLAUDE.md</a>
+  <div class="grp">Reference</div>
+  <a href="#architecture">Architecture</a>
+  <a href="#demo">Demo walkthrough</a>
+  <a href="#api">REST API</a>
+  <a href="#mcptools">MCP tools</a>
+  <a href="#envvars">Environment variables</a>
+  <a href="#nodocker">Run without Docker</a>
+  <a href="#faq">Troubleshooting &amp; FAQ</a>
+</aside>
+
+<main>
+  <h1>ContextAnchor documentation</h1>
+  <p class="lede">The missing context layer for AI-assisted coding — powered by a FalkorDB graph.</p>
+
+  <h2 id="overview">Overview</h2>
+  <p>ContextAnchor turns a codebase into a <b>graph</b> and answers three questions before any change is made:
+  <b>what breaks</b> (blast radius), <b>what rule it violates</b> (team memory), and <b>who owns it</b> (from git history).
+  The same graph powers a web dashboard, a CLI gate, a GitHub PR bot, and an <b>MCP server</b> your AI agent calls directly.</p>
+  <p>It unifies all three Graph Hacks tracks — Act on Connected Data, Agent Memory, and Company Brain — on one FalkorDB graph.</p>
+
+  <h2 id="quickstart">Quick start</h2>
+  <pre><code>git clone &lt;your-repo-url&gt; &amp;&amp; cd contextanchor
+docker compose up --build</code></pre>
+  <p>Open <a href="/">http://localhost:8000</a> (dashboard) and <code>http://localhost:9000/sse</code> (MCP).
+  A sample microservices graph auto-seeds on first boot  <b>no API key, no setup</b>. Add an LLM key later from
+  <a href="/manage">Settings</a> for AI-written summaries.</p>
+  <div class="note"><b>Offline-safe:</b> without an LLM key, every verdict still comes straight from FalkorDB (graph mode). The LLM only adds a natural-language summary.</div>
+
+  <h2 id="concepts">Core concepts</h2>
+  <h3>The graph model</h3>
+  <table><tr><th>Node</th><th>Meaning</th></tr>
+  <tr><td><code>File</code> / <code>Function</code></td><td>Code structure. Functions are keyed by <code>fid = file::name</code> so same-named functions never merge.</td></tr>
+  <tr><td><code>Endpoint</code></td><td>An HTTP route (FastAPI/Flask/Express) that executes a function.</td></tr>
+  <tr><td><code>Developer</code></td><td>Code owner, derived from real <code>git log</code> history.</td></tr>
+  <tr><td><code>TeamRule</code></td><td>An architecture/convention rule — persistent agent memory.</td></tr>
+  <tr><td><code>ADR</code></td><td>Architecture Decision Record — the "why".</td></tr></table>
+  <p>Relationships: <code>CONTAINS</code>, <code>CALLS</code>, <code>EXECUTES</code>, <code>AUTHORED</code>, <code>GOVERNS</code>, <code>APPLIES_TO</code>.</p>
+  <h3>Verdicts</h3>
+  <p><code>BLOCK</code> (a HIGH-severity rule applies) · <code>REVIEW</code> (3+ callers or a live API affected) · <code>SAFE</code> (leaf, no rules).</p>
+  <h3>A worked example</h3>
+  <p>Your agent wants to edit <code>calculate_discount()</code>. ContextAnchor runs the blast-radius traversal:</p>
+  <pre><code>MATCH (t:Function {fid: 'billing_service.py::calculate_discount'})
+MATCH p = (caller:Function)-[:CALLS*1..3]-&gt;(t)
+RETURN DISTINCT caller.name, min(length(p)) AS hops
+ORDER BY hops;</code></pre>
+  <p>→ <code>create_invoice</code> (1 hop), <code>checkout</code> (1), <code>place_order</code> (2). Two endpoints reach those callers
+  (<code>GET /invoices</code>, <code>POST /checkout</code>). A <code>GOVERNS</code> edge finds <b>RULE-4 (HIGH)</b>  "discounts can't
+  exceed 50%". Result: <b>verdict = BLOCK</b>, owner <b>Arjun Rao</b> (from git), decision <b>ADR-07</b>. The agent now has
+  everything it needs to avoid breaking the change — all from one graph, in milliseconds.</p>
+
+  <h2 id="dashboard">The dashboard</h2>
+  <p>Left sidebar, top to bottom: <b>Codebase</b> (pick a project / ingest), <b>Check a change</b> (type a function),
+  <b>Ask this project</b>, <b>Try it</b> (sample scenarios + guided tour), and <b>Advanced</b> (rules, CLAUDE.md export).
+  The centre shows a live <b>project overview</b> with the riskiest chokepoints — click one to inspect its impact as a focused graph.</p>
+
+  <h2 id="ingest">Ingesting repos</h2>
+  <p>Paste a GitHub URL or a local path in <b>Codebase — Ingest</b>, or use the CLI:</p>
+  <pre><code>docker compose exec web python -m app.ingest --repo https://github.com/user/repo</code></pre>
+  <p>Languages: <b>Python</b> (precise, via <code>ast</code>) and <b>JS/TS/Go/Java</b> (approximate, regex). Ownership comes from the repo's git history.</p>
+  <div class="note"><b>Private repos:</b> add a GitHub token in <a href="/manage">Settings</a> once, then ingest private URLs the same way.</div>
+
+  <h2 id="ask">Grounded Ask</h2>
+  <p>The <b>Ask this project</b> box answers natural-language questions ("what handles billing?") using <b>only</b> facts
+  retrieved from the graph (matching functions + their docstrings, rules, chokepoints), so the LLM stays grounded and can't hallucinate.</p>
+
+  <h2 id="settings">Settings</h2>
+  <p>In <a href="/manage">Manage — Settings</a> you configure <b>one LLM</b> (NVIDIA NIM key, base URL, model) and a <b>GitHub token</b>.
+  Values are stored in FalkorDB and shown masked. Environment variables (<code>NVIDIA_API_KEY</code>, <code>GITHUB_TOKEN</code>) are used as fallback.</p>
+
+  <h2 id="t-first">Tutorial 1 — Your first analysis</h2>
+  <div class="step"><b>1.</b> Open the dashboard. The sample project loads automatically.</div>
+  <div class="step"><b>2.</b> In <b>Try it</b>, click <b>Scenario 1 — Refactor calculate_discount</b>.</div>
+  <div class="step"><b>3.</b> Watch the graph light up: red = blast radius, amber = rule, green = owner, blue = ADR. The right panel shows the full impact review.</div>
+  <p>Or type <code>execute_query</code> in <b>Check a change</b> and hit Check.</p>
+
+  <h2 id="t-repo">Tutorial 2 — Analyse your own repo</h2>
+  <div class="step"><b>1.</b> Paste a repo URL (e.g. <code>https://github.com/pallets/click</code>) into <b>Codebase — Ingest</b>.</div>
+  <div class="step"><b>2.</b> The project switches to it. Type a function name (autocomplete helps) and Check.</div>
+  <div class="step"><b>3.</b> Add your team's rules in <b>Manage — Team rules</b> so future checks enforce them.</div>
+
+  <h2 id="t-mcp">Tutorial 3 — Connect your AI agent (MCP)</h2>
+  <p>ContextAnchor <b>is</b> an MCP (Model Context Protocol) server. Any MCP-capable coding agent can call its
+  seven tools to pull real context from the FalkorDB graph <i>before</i> it edits your code. Pick the transport
+  your client prefers:</p>
+  <table>
+    <tr><th>Transport</th><th>Endpoint / command</th><th>Best for</th></tr>
+    <tr><td><b>SSE</b> (running from <code>docker compose</code>)</td><td><code>http://localhost:9000/sse</code></td><td>Claude Code, Cursor, Windsurf</td></tr>
+    <tr><td><b>stdio</b> (client launches the process)</td><td><code>python -m app.mcp_server --stdio</code></td><td>Claude Desktop, offline/local</td></tr>
+  </table>
+  <div class="note"><b>Prerequisite:</b> for SSE, keep <code>docker compose up</code> running — the <code>mcp</code> container
+  serves <code>:9000</code> and FalkorDB serves <code>:6379</code>. Check it first: <code>curl -N http://localhost:9000/sse</code>
+  should open a stream and stay connected.</div>
+
+  <h3>Claude Code</h3>
+  <p>One command registers the server (SSE):</p>
+  <pre><code>claude mcp add --transport sse contextanchor http://localhost:9000/sse</code></pre>
+  <p>Verify with <code>claude mcp list</code> (should read <code>contextanchor: connected</code>); inside a session run
+  <code>/mcp</code> to see the seven tools. To share it with your team, commit a project-scoped <code>.mcp.json</code> at the repo root:</p>
+  <pre><code>{
+  "mcpServers": {
+    "contextanchor": { "type": "sse", "url": "http://localhost:9000/sse" }
+  }
+}</code></pre>
+
+  <h3>Cursor</h3>
+  <p>Create or edit <code>~/.cursor/mcp.json</code> (global) or <code>.cursor/mcp.json</code> (this project only):</p>
+  <pre><code>{
+  "mcpServers": {
+    "contextanchor": { "url": "http://localhost:9000/sse" }
+  }
+}</code></pre>
+  <p>Open <b>Cursor Settings → MCP</b>: <code>contextanchor</code> should show a green dot and 7 tools. Toggle it on.</p>
+
+  <h3>Claude Desktop</h3>
+  <p>Edit the config file (create it if missing), then <b>fully restart</b> Claude Desktop:</p>
+  <table>
+    <tr><th>OS</th><th>Path</th></tr>
+    <tr><td>macOS</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
+    <tr><td>Windows</td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td></tr>
+  </table>
+  <p>Claude Desktop launches MCP servers over <b>stdio</b>, so bridge the SSE endpoint with <code>mcp-remote</code>
+  (no extra install — <code>npx</code> fetches it):</p>
+  <pre><code>{
+  "mcpServers": {
+    "contextanchor": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "http://localhost:9000/sse"]
+    }
+  }
+}</code></pre>
+  <p>After restart the tools appear under the <b>tools</b> (🔌) menu in the message box. Prefer launching the server
+  directly over stdio instead? See <a href="#nodocker">Run without Docker</a>.</p>
+
+  <h3>Use it</h3>
+  <p>Ask your agent, in plain language:</p>
+  <pre><code>Use contextanchor to analyze_change on calculate_discount before you edit it.</code></pre>
+  <p>The agent calls the tool and gets back structured, graph-grounded context:</p>
+  <pre><code>{
+  "verdict": "BLOCK",
+  "project": "contextanchor_sample",
+  "blast_radius": {
+    "callers": [
+      {"name": "create_invoice", "file": "billing_service.py", "hops": 1},
+      {"name": "checkout",       "file": "order_service.py",   "hops": 1},
+      {"name": "place_order",    "file": "order_service.py",   "hops": 2}
+    ],
+    "endpoints": ["POST /checkout", "GET /invoices"]
+  },
+  "rules": [{"id": "RULE-4", "severity": "HIGH", "rule_text": "Discounts can't exceed 50%"}],
+  "owner": {"name": "Arjun Rao", "commits": 14, "adr": "ADR-07"},
+  "chokepoint": {"name": "calculate_discount", "score": 0.81},
+  "recommendation": "BLOCK — RULE-4 (HIGH) governs this; 3 callers and 2 live endpoints depend on it. Loop in Arjun Rao."
+}</code></pre>
+  <p>Now the agent writes the compliant change instead of breaking three teams.</p>
+  <div class="note"><b>Testing from Python?</b> Use the <b>official</b> MCP SDK client
+  (<code>from mcp.client.sse import sse_client</code>) — the stand-alone <code>fastmcp</code> client has a pydantic
+  incompatibility with this server.</div>
+  <div class="warn"><b>Tools not showing up?</b> (1) Confirm the stream: <code>curl -N http://localhost:9000/sse</code>.
+  (2) Fully quit and reopen the client (a reload isn't always enough). (3) For stdio, FalkorDB must be reachable —
+  set <code>FALKORDB_HOST=localhost</code> and keep <code>docker compose up</code> running. (4) "Ambiguous function
+  name" → pass the full <code>fid</code> (<code>file::name</code>), e.g. <code>billing_service.py::calculate_discount</code>.</div>
+  <h2 id="t-precommit">Tutorial 4 — Block risky commits (pre-commit / CI)</h2>
+  <pre><code># one-off check (exit 1 on BLOCK)
+docker compose exec web python -m app.check calculate_discount
+
+# install the git hook
+ln -s ../../integrations/git-hooks/pre-commit .git/hooks/pre-commit</code></pre>
+  <p>Claude Code users can also drop <code>integrations/claude-code/settings.json</code> into <code>.claude/</code> to warn the agent before every edit.</p>
+
+  <h2 id="t-prbot">Tutorial 5 — GitHub PR impact bot</h2>
+  <p>The workflow at <code>.github/workflows/contextanchor.yml</code> runs on every pull request: it spins up FalkorDB,
+  ingests the repo, maps the PR diff to functions, and comments the combined blast radius, violated rules and suggested reviewers.</p>
+  <p>It needs <code>pull-requests: write</code> permission (already set). Set <code>CA_STRICT=1</code> to fail the check on a BLOCK verdict.</p>
+
+  <h2 id="t-claudemd">Tutorial 6 — Generate CLAUDE.md / .cursorrules</h2>
+  <pre><code>docker compose exec web python -m app.genrules --project proj_myrepo --format claude &gt; CLAUDE.md</code></pre>
+  <p>Or click <b>Open CLAUDE.md</b> under <b>Advanced</b>. The file is regenerated from the graph — hard rules, chokepoints
+  to edit carefully, ownership and API entrypoints — so your agent's base context is never stale.</p>
+
+  <h2 id="architecture">Architecture</h2>
+  <p>Three containers via <code>docker compose</code>, all talking to one FalkorDB instance:</p>
+  <pre><code>Browser (Cytoscape + dagre)          AI agent (Cursor / Claude Code)
+        |  HTTP / JSON                        |  MCP over SSE
+   FastAPI  web :8000                   mcp_server  :9000
+        \_____________ app/agent.py _____________/
+                            |
+                   FalkorDB :6379   (Cypher + algo.betweenness)
+                            |
+              NVIDIA NIM LLM (optional; graph-template fallback)</code></pre>
+  <ul>
+    <li><b>Per-project graphs:</b> every ingested repo is its own FalkorDB graph (<code>proj_&lt;name&gt;</code>); a small
+      <code>ca_meta</code> graph holds the project registry and your LLM/GitHub settings.</li>
+    <li><b>Parsing:</b> <code>app/ingest.py</code>  Python via stdlib <code>ast</code> (precise), JS/TS/Go/Java via regex (approximate).
+      Function docstrings are stored so the agent knows what code <i>does</i>, not just how it connects.</li>
+    <li><b>Resilience:</b> the sample graph auto-reseeds if its schema is outdated; the LLM is always optional.</li>
+  </ul>
+
+  <h2 id="demo">Demo walkthrough (2 min, silent-friendly)</h2>
+  <div class="step"><b>0:00</b>  Open <a href="/landing">/landing</a>, scroll the hero.</div>
+  <div class="step"><b>0:20</b>  Open the dashboard, click <b>Guided demo tour</b>  it auto-runs the three scenarios with captions.</div>
+  <div class="step"><b>1:10</b>  Ingest a real repo, Check a function, show the focused graph + git owner.</div>
+  <div class="step"><b>1:40</b>  Show an AI agent calling the MCP <code>analyze_change</code> tool live.</div>
+  <div class="step"><b>2:00</b>  End on <code>docker compose up</code>  "the graph is the product."</div>
+
+  <h2 id="api">REST API (selected)</h2>
+  <table>
+  <tr><th>Method</th><th>Path</th><th>Purpose</th></tr>
+  <tr><td><span class="pill post">POST</span></td><td><code>/api/analyze</code></td><td>Impact of a function (fid or name) + focused graph.</td></tr>
+  <tr><td><span class="pill get">GET</span></td><td><code>/api/overview?project=</code></td><td>Counts + top chokepoints.</td></tr>
+  <tr><td><span class="pill post">POST</span></td><td><code>/api/ingest</code></td><td>Ingest a repo (url or path).</td></tr>
+  <tr><td><span class="pill post">POST</span></td><td><code>/api/ask</code></td><td>Grounded Q&amp;A over the graph.</td></tr>
+  <tr><td><span class="pill post">POST</span></td><td><code>/api/analyze_diff</code></td><td>PR-level impact from a unified diff.</td></tr>
+  <tr><td><span class="pill get">GET</span></td><td><code>/api/export/rules?format=claude</code></td><td>Generate CLAUDE.md / .cursorrules.</td></tr>
+  <tr><td><span class="pill post">POST</span></td><td><code>/api/rule</code> · <code>/api/project/(refresh|delete)</code></td><td>Manage rules &amp; projects.</td></tr>
+  </table>
+
+  <h2 id="mcptools">MCP tools</h2>
+  <table>
+  <tr><th>Tool</th><th>Returns</th></tr>
+  <tr><td><code>analyze_change(function)</code></td><td>Verdict + blast radius + rules + owner + chokepoint.</td></tr>
+  <tr><td><code>blast_radius(function)</code></td><td>Upstream callers + impacted APIs.</td></tr>
+  <tr><td><code>team_rules(function)</code></td><td>Rules governing the function.</td></tr>
+  <tr><td><code>find_owner(function)</code></td><td>Owner (git) + ADR.</td></tr>
+  <tr><td><code>chokepoints(project?)</code></td><td>Top betweenness-centrality single points of failure.</td></tr>
+  <tr><td><code>list_functions(project?)</code></td><td>Every function in a project's graph.</td></tr>
+  <tr><td><code>list_projects()</code></td><td>All ingested codebases you can query.</td></tr>
+  </table>
+
+  <h2 id="envvars">Environment variables</h2>
+  <p>Set these in <code>.env</code> (git-ignored) or pass them to the containers. Anything you configure in
+  <a href="/manage">Manage → Settings</a> is stored in FalkorDB and <b>overrides</b> the matching variable.</p>
+  <table>
+    <tr><th>Variable</th><th>Default</th><th>Purpose</th></tr>
+    <tr><td><code>FALKORDB_HOST</code></td><td><code>falkordb</code> (in compose) / <code>localhost</code></td><td>FalkorDB host. Use <code>localhost</code> when running a process outside Docker.</td></tr>
+    <tr><td><code>FALKORDB_PORT</code></td><td><code>6379</code></td><td>FalkorDB port (published by <code>docker compose</code>).</td></tr>
+    <tr><td><code>NVIDIA_API_KEY</code></td><td><i>(empty)</i></td><td>Optional. Enables LLM-written summaries. Blank = offline graph mode.</td></tr>
+    <tr><td><code>NVIDIA_BASE_URL</code></td><td><code>https://integrate.api.nvidia.com/v1</code></td><td>OpenAI-compatible LLM endpoint.</td></tr>
+    <tr><td><code>NVIDIA_MODEL</code></td><td><code>meta/llama-3.2-11b-vision-instruct</code></td><td>Model used for narration / grounded Ask.</td></tr>
+    <tr><td><code>GITHUB_TOKEN</code></td><td><i>(empty)</i></td><td>Clone private repos (needs <code>repo</code> read scope).</td></tr>
+    <tr><td><code>MCP_HOST</code> / <code>MCP_PORT</code></td><td><code>0.0.0.0</code> / <code>9000</code></td><td>Where the MCP SSE server binds.</td></tr>
+    <tr><td><code>CA_STRICT</code></td><td><code>0</code></td><td>PR bot / CLI: set <code>1</code> to fail the check on a <code>BLOCK</code> verdict.</td></tr>
+  </table>
+  <div class="warn"><b>Never commit <code>.env</code></b> — your NVIDIA key and GitHub token live there and it is already git-ignored.</div>
+
+  <h2 id="nodocker">Run without Docker (local stdio)</h2>
+  <p>For Claude Desktop's direct-stdio config, or local development, run the MCP server as a plain process.
+  FalkorDB still has to be reachable — the simplest path is to let <code>docker compose up</code> run it on <code>:6379</code>:</p>
+  <pre><code>pip install -r requirements.txt
+FALKORDB_HOST=localhost python -m app.mcp_server --stdio</code></pre>
+  <p>Claude Desktop config that launches it directly (no <code>mcp-remote</code> bridge):</p>
+  <pre><code>{
+  "mcpServers": {
+    "contextanchor": {
+      "command": "python",
+      "args": ["-m", "app.mcp_server", "--stdio"],
+      "cwd": "/absolute/path/to/contextanchor",
+      "env": { "FALKORDB_HOST": "localhost", "FALKORDB_PORT": "6379" }
+    }
+  }
+}</code></pre>
+
+  <h2 id="faq">Troubleshooting &amp; FAQ</h2>
+  <h3>A function shows "No upstream callers"</h3>
+  <p>It's a leaf — nothing calls it — so changing it is <code>SAFE</code>. That's correct, not a bug.</p>
+  <h3>Two functions share a name</h3>
+  <p>Functions are keyed by <code>fid = file::name</code>. Pick the exact one from the dropdown (it shows name · file).</p>
+  <h3>My ingested repo looks wrong after an update</h3>
+  <p>Re-ingest it from <a href="/manage">Manage → Refresh</a>  older graphs may predate the <code>fid</code>/<code>doc</code> fields.</p>
+  <h3>The MCP container won't start</h3>
+  <p>Ensure <code>fastmcp&gt;=2</code> is installed and rebuild: <code>docker compose build --no-cache mcp</code>. Test with the
+  <i>official</i> MCP SDK client (<code>mcp.client.sse</code>), not the stand-alone fastmcp client.</p>
+  <h3>A private repo won't clone</h3>
+  <p>Add a GitHub token with <code>repo</code> read scope in <a href="/manage">Settings</a>, then ingest the private URL.</p>
+  <h3>Does it support languages other than Python well?</h3>
+  <p>Python is precise (AST). JS/TS/Go/Java use a lightweight regex pass — good for structure, occasionally approximate on call
+  attribution. Full multi-language (tree-sitter) is on the roadmap.</p>
+
+  <p style="margin-top:40px;color:var(--mut);font-size:13px">ContextAnchor — built for Graph Hacks: Context for AI Agents (FalkorDB x WeMakeDevs).</p>
+</main>
+</div>
+</body>
+</html>

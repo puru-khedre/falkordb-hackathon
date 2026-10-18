@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ContextAnchor — Codebase Impact Guardian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.30.2/cytoscape.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape-dagre/2.5.0/cytoscape-dagre.min.js"></script>
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="logo">⚓</div>
+      <div><h1>ContextAnchor</h1><p class="tag">Impact guardian for your codebase</p></div>
+    </div>
+
+    <div class="panel">
+      <h2>Codebase</h2>
+      <select id="projectSel"></select>
+      <div class="row" style="margin-top:8px">
+        <input id="sourceInput" placeholder="GitHub URL or local path" />
+        <button id="ingestBtn">Ingest</button>
+      </div>
+      <p class="hint">Any repo — Python (precise) + JS/TS/Go/Java. Owners from git history.</p>
+    </div>
+
+    <div class="panel primary">
+      <h2>Check a change</h2>
+      <p class="hint">Pick a function — see what breaks, which rule it hits, and who owns it — before you edit.</p>
+      <div class="row">
+        <select id="fnInput"></select>
+        <button id="analyzeBtn">Check</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Ask this project</h2>
+      <div class="row">
+        <input id="askInput" placeholder="e.g. what handles billing?" />
+        <button id="askBtn">Ask</button>
+      </div>
+      <p class="hint">Answered from the graph, grounded by the LLM.</p>
+    </div>
+
+    <div class="panel" id="demoPanel">
+      <h2>Try it (sample)</h2>
+      <button id="tourBtn" class="chip-btn" style="margin-bottom:9px;border-color:rgba(56,189,248,.4)">▶ Guided demo tour</button>
+      <div class="chips">
+        <button class="chip-btn" data-sid="1">Refactor <code>calculate_discount</code></button>
+        <button class="chip-btn" data-sid="2">Token-handling rule check</button>
+        <button class="chip-btn" data-sid="3">Ownership &amp; ADR audit</button>
+      </div>
+    </div>
+
+    <details class="panel adv">
+      <summary>Advanced</summary>
+      <div style="margin-top:10px">
+        <label class="lbl">Add a team rule</label>
+        <input id="ruleText" placeholder="e.g. No raw SQL in services" />
+        <div class="row" style="margin-top:6px">
+          <input id="ruleFn" placeholder="function (optional)" />
+          <select id="ruleSev"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select>
+        </div>
+        <button id="ruleBtn" class="ghost" style="margin-top:6px">Save rule</button>
+
+        <label class="lbl" style="margin-top:14px">Agent context</label>
+        <button id="exportBtn" class="ghost">Open CLAUDE.md (from graph)</button>
+        <button id="reseedBtn" class="ghost" style="margin-top:6px">Reset sample demo</button>
+      </div>
+    </details>
+
+    <div class="legend-row">
+      <span><i class="dot red"></i>breaks</span>
+      <span><i class="dot amber"></i>rule</span>
+      <span><i class="dot green"></i>owner</span>
+      <span><i class="dot blue"></i>ADR</span>
+    </div>
+    <div class="footnav">
+      <a href="/" class="active">⌂ Home</a>
+      <a href="/landing">ⓘ About</a>
+      <a href="/docs">▤ Docs</a>
+      <a href="/manage">⚙ Settings</a>
+    </div>
+    <div id="health" class="health">connecting</div>
+  </aside>
+
+  <main id="stage">
+    <div id="cy"></div>
+    <div id="banner" class="banner hidden"></div>
+    <div id="tourCap" class="tourcap hidden"></div>
+    <div id="emptyState" class="empty">
+      <div class="empty-card" id="overviewCard">
+        <h3>Check a change before you make it</h3>
+        <p>Pick a function on the left, click a risky chokepoint below, or try a sample scenario.</p>
+      </div>
+    </div>
+  </main>
+
+  <section id="report">
+    <div class="report-empty" id="reportEmptyPanel">
+      <h3>No change selected</h3>
+      <p>The impact review — blast radius, rules, owner — appears here. The same
+      graph queries power the MCP server your AI agent calls.</p>
+    </div>
+    <div id="reportBody" class="hidden"></div>
+  </section>
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

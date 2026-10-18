@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ContextAnchor — Manage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e14;--panel:#111722;--panel2:#0d131d;--line:#1e2836;--txt:#e6edf3;--mut:#7d8da5;--acc:#38bdf8;--red:#ff3b5c;--amber:#ffb224;--green:#2fe08a;--blue:#6aa5ff;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font-family:'Inter',system-ui,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:26px 22px 60px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.logo{width:38px;height:38px;display:grid;place-items:center;font-size:19px;background:linear-gradient(135deg,#0ea5e9,#2563eb);border-radius:10px;box-shadow:0 0 18px rgba(56,189,248,.45)}
+h1{font-size:19px;margin:0}.sub{font-size:12px;color:var(--mut);margin-top:2px}
+a.back{margin-left:auto;color:var(--acc);text-decoration:none;font-size:13px;font-weight:600;border:1px solid var(--line);padding:8px 13px;border-radius:9px}
+a.back:hover{border-color:var(--acc)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;margin-bottom:18px}
+.card h2{font-size:12px;text-transform:uppercase;letter-spacing:1.1px;color:var(--mut);margin:0 0 13px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input,select{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:9px;padding:9px 11px;font-size:13px;font-family:var(--mono)}
+select{font-family:'Inter',sans-serif}
+input:focus,select:focus{outline:none;border-color:var(--acc)}
+input.grow{flex:1;min-width:160px}
+button{cursor:pointer;border:none;border-radius:9px;padding:9px 14px;font-weight:700;font-size:13px}
+.btn{background:var(--acc);color:#001018}.btn:hover{filter:brightness(1.08)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--mut)}
+.ghost:hover{border-color:var(--acc);color:var(--txt)}
+.danger{background:transparent;border:1px solid rgba(255,59,92,.4);color:var(--red)}
+.danger:hover{background:rgba(255,59,92,.12)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.8px;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.mono{font-family:var(--mono)}.muted{color:var(--mut)}
+.pill{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:6px;font-weight:700}
+.pill.sample{background:rgba(125,141,165,.18);color:var(--mut)}
+.pill.repo{background:rgba(56,189,248,.14);color:var(--acc)}
+.pill.HIGH{background:rgba(255,59,92,.16);color:var(--red)}
+.pill.MEDIUM{background:rgba(255,178,36,.16);color:var(--amber)}
+.pill.LOW{background:rgba(125,141,165,.18);color:var(--mut)}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.acts button{padding:6px 10px;font-size:12px}
+.counts{font-family:var(--mono);font-size:11.5px;color:var(--mut)}
+.empty{color:var(--mut);font-size:13px;padding:8px 2px}
+.hint{font-size:11px;color:var(--mut);margin:8px 0 0}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:.25s;pointer-events:none}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">⚓</div>
+    <div><h1>Manage</h1><div class="sub">Repos, rules &amp; data — ContextAnchor</div></div>
+    <a class="back" href="/docs" style="margin-left:auto">Docs</a>
+    <a class="back" href="/" style="margin-left:8px">← Dashboard</a>
+  </header>
+
+  <div class="card">
+    <h2>Ingest a new repo</h2>
+    <div class="row">
+      <input id="src" class="grow" placeholder="GitHub URL or local path" />
+      <button class="btn" id="ingestBtn">Ingest</button>
+    </div>
+    <p class="hint">Python (precise) + JS/TS/Go/Java (approximate). Owners come from git history.</p>
+  </div>
+
+  <div class="card">
+    <h2>Settings — LLM &amp; GitHub</h2>
+    <div class="row">
+      <input id="ghToken" class="grow" type="password" placeholder="GitHub token (for private repos)" />
+      <span id="ghStatus" class="muted" style="align-self:center;font-size:12px"></span>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input id="llmKey" class="grow" type="password" placeholder="LLM API key (NVIDIA NIM)" />
+      <span id="llmStatus" class="muted" style="align-self:center;font-size:12px"></span>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input id="llmBase" class="grow" placeholder="LLM base URL" />
+      <input id="llmModel" class="grow" placeholder="Model" />
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="saveSettings">Save settings</button>
+    </div>
+    <p class="hint">One LLM for the whole app. Stored in FalkorDB, shown masked. Leave a field blank to keep it unchanged.</p>
+  </div>
+
+  <div class="card">
+    <h2>Projects</h2>
+    <table id="projTable"><thead>
+      <tr><th>Project</th><th>Type</th><th>Contents</th><th>Source</th><th></th></tr>
+    </thead><tbody id="projBody"></tbody></table>
+  </div>
+
+  <div class="card">
+    <h2>Team rules</h2>
+    <div class="row" style="margin-bottom:12px">
+      <select id="ruleProj"></select>
+      <button class="ghost" id="refreshRules">Reload</button>
+    </div>
+    <table id="ruleTable"><thead>
+      <tr><th>ID</th><th>Severity</th><th>Rule</th><th>Governs</th><th></th></tr>
+    </thead><tbody id="ruleBody"></tbody></table>
+
+    <div class="row" style="margin-top:14px">
+      <input id="rId" placeholder="RULE-ID (blank = auto)" style="width:150px" />
+      <select id="rSev"><option>HIGH</option><option selected>MEDIUM</option><option>LOW</option></select>
+      <input id="rText" class="grow" placeholder="Rule text" />
+      <input id="rFn" placeholder="function (optional)" style="width:170px" />
+      <button class="btn" id="saveRule">Save rule</button>
+    </div>
+    <p class="hint">Enter an existing ID to edit it, or leave blank to create a new one.</p>
+  </div>
+</div>
+<div id="toast"></div>
+<script src="/static/manage.js"></script>
+</body>
+</html>

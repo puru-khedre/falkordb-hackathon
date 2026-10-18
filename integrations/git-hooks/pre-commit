@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# ContextAnchor pre-commit gate. Install:
+#   ln -s ../../integrations/git-hooks/pre-commit .git/hooks/pre-commit
+# Requires ContextAnchor running (default http://localhost:8000).
+set -euo pipefail
+CA_URL="${CA_URL:-http://localhost:8000}"
+DIFF="$(git diff --cached --unified=0)"
+[ -z "$DIFF" ] && exit 0
+
+RESP="$(printf '%s' "$DIFF" | python3 -c '
+import sys, json, urllib.request, os
+diff = sys.stdin.read()
+url = os.getenv("CA_URL","http://localhost:8000")
+try:
+    req = urllib.request.Request(url+"/api/analyze_diff",
+        data=json.dumps({"diff":diff,"project":os.getenv("CA_PROJECT","")}).encode(),
+        headers={"Content-Type":"application/json"})
+    r = json.load(urllib.request.urlopen(req, timeout=8))
+except Exception as e:
+    print("SKIP"); sys.exit(0)
+print(r.get("verdict","SAFE"))
+print(r.get("markdown",""))
+' )" || exit 0
+
+VERDICT="$(printf '%s' "$RESP" | head -1)"
+BODY="$(printf '%s' "$RESP" | tail -n +2)"
+[ "$VERDICT" = "SKIP" ] && exit 0
+printf '%s\n' "$BODY"
+if [ "$VERDICT" = "BLOCK" ]; then
+  echo ""
+  echo "Commit blocked by ContextAnchor (BLOCK). Use 'git commit --no-verify' to override."
+  exit 1
+fi
+exit 0
